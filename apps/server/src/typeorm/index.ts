@@ -1,7 +1,5 @@
-import { User } from './user.entity';
 import { Waitlist } from './waitlist.entity';
 
-const entities = [User, Waitlist];
+const entities = [Waitlist];
 
-export { User };
 export default entities;
