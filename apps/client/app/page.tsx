@@ -11,10 +11,10 @@ const page = () => {
           </a>
         </h1>
 
-        <p className='mt-3 text-2xl'>
+        <p className='mt-4 text-2xl'>
           Enter the waitlist{' '}
           <input
-            className='border border-gray-700 rounded-md p-2 m-2 bg-black text-white focus:outline-none focus:ring-purple-600 focus:border-purple-600 text-center'
+            className='border-2 border-gray-700 rounded-md p-2 m-2 bg-black text-white focus:outline-none focus:ring-purple-600 focus:border-purple-600 text-center'
             type='text'
             placeholder='Your email address'
           />
