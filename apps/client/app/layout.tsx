@@ -9,7 +9,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html className='bg-black text-white' lang='en'>
+    //   create a dynamic gradient absolute background with tailwind
+    <html className='h-full bg-black text-white' lang='en'>
       <body>
         <>
           {children}
