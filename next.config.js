@@ -4,6 +4,10 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     appDir: true
+  },
+  images: {
+    dangerouslyAllowSVG: true,
+    domains: ['tailwindui.com']
   }
 }
 
