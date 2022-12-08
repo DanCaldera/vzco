@@ -29,7 +29,6 @@ const Page = () => {
             VZCO
           </a>
         </h1>
-        <h2 className='text-2xl text-gray-300'>The descentraliced link in bio</h2>
         <form onSubmit={formik.handleSubmit} className='mt-4 text-2xl'>
           Enter the waitlist{' '}
           <input
