@@ -1,7 +1,14 @@
+'use client'
+
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import { useState } from 'react'
 
 export default function Example() {
+  const [email, setEmail] = useState('')
+
   return (
     <div className='bg-white pb-8 sm:pb-12 lg:pb-12'>
       <div className='overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48'>
@@ -31,20 +38,10 @@ export default function Example() {
                   <label htmlFor='hero-email' className='sr-only'>
                     Email address
                   </label>
-                  <input
-                    id='hero-email'
-                    type='email'
-                    className='block w-full rounded-md border border-gray-300 px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
-                    placeholder='Enter your email'
-                  />
+                  <Input id='hero-email' type='email' placeholder='Enter your email' value={email} setValue={setEmail} />
                 </div>
                 <div className='mt-4 sm:mt-0 sm:ml-3'>
-                  <button
-                    type='submit'
-                    className='block w-full rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10'
-                  >
-                    Notify me
-                  </button>
+                  <Button>Notify me</Button>
                 </div>
               </form>
               <div className='mt-6'>
