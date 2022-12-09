@@ -20,12 +20,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Todo List
 
-[x] Waitlist
-[] LogIn
-[] Forgot Password
-[] SignUp
-[] Basic Todo for Main App
-[] Saas Subscriptions with Stripe
+- [x] Waitlist
+- [] LogIn
+- [] Forgot Password
+- [] SignUp
+- [] Basic Todo for Main App
+- [] Saas Subscriptions with Stripe
 
 ## Deploy on Vercel
 
