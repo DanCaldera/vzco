@@ -1,11 +1,17 @@
 ## Getting Started
 
-optional: install husky to run pre-commit hooks
+Optional: install husky to run pre-commit hooks
 
 ```bash
 npx install husky
 # or
 yarn install husky
+```
+
+Add the basic env variables from .env.example to .env.local
+
+```bash
+cp .env.example .env.local
 ```
 
 First, run the development server:
