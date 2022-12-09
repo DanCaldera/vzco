@@ -1,16 +1,49 @@
 'use client'
 
-import { ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
-import Image from 'next/image'
 import Button from '@/components/Button'
 import Input from '@/components/Input'
-import { useState } from 'react'
+import { ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image'
+import { FormEvent, useState } from 'react'
+import { toast, Toaster } from 'react-hot-toast'
 
 export default function Example() {
   const [email, setEmail] = useState('')
 
+  const _handleNotifyMe = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    try {
+      const url = 'http://localhost:4000/api/v1/waitlist'
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await response.json()
+
+      if (data.error || data.statusCode >= 400) {
+        console.log(data.error)
+        toast.error('Something went wrong!')
+      }
+
+      if (data.id) {
+        toast.success('You have been added to the waitlist!')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+    setEmail('')
+  }
+
   return (
     <div className='bg-white pb-8 sm:pb-12 lg:pb-12'>
+      <Toaster />
       <div className='overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48'>
         <div className='mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-24 lg:px-8'>
           <div>
@@ -33,7 +66,7 @@ export default function Example() {
                   Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.
                 </p>
               </div>
-              <form action='#' className='mt-12 sm:flex sm:w-full sm:max-w-lg'>
+              <form onSubmit={_handleNotifyMe} className='mt-12 sm:flex sm:w-full sm:max-w-lg'>
                 <div className='min-w-0 flex-1'>
                   <label htmlFor='hero-email' className='sr-only'>
                     Email address
@@ -41,7 +74,7 @@ export default function Example() {
                   <Input id='hero-email' type='email' placeholder='Enter your email' value={email} setValue={setEmail} />
                 </div>
                 <div className='mt-4 sm:mt-0 sm:ml-3'>
-                  <Button>Notify me</Button>
+                  <Button type='submit'>Notify me</Button>
                 </div>
               </form>
               <div className='mt-6'>
