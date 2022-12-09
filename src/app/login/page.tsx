@@ -1,9 +1,22 @@
+'use client'
+
+import Button from '@/components/Button'
+import Input from '@/components/Input'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
+import { toast, Toaster } from 'react-hot-toast'
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const _handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    toast('Sign up is not implemented yet', { icon: '🚧' })
+  }
   return (
     <div className='flex min-h-screen'>
+      <Toaster />
       <div className='flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
         <div className='mx-auto w-full max-w-sm lg:w-96'>
           <div>
@@ -21,20 +34,13 @@ export default function LoginPage() {
 
           <div className='mt-8'>
             <div className='mt-6'>
-              <form action='#' method='POST' className='space-y-6'>
+              <form onSubmit={_handleSubmit} method='POST' className='space-y-6'>
                 <div>
                   <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
                     Email address or Username
                   </label>
                   <div className='mt-1'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      autoComplete='email'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-                    />
+                    <Input id='email' name='email' type='email' required value={email} setValue={setEmail} />
                   </div>
                 </div>
 
@@ -43,14 +49,7 @@ export default function LoginPage() {
                     Password
                   </label>
                   <div className='mt-1'>
-                    <input
-                      id='password'
-                      name='password'
-                      type='password'
-                      autoComplete='current-password'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-                    />
+                    <Input id='password' name='password' type='password' required value={password} setValue={setPassword} />
                   </div>
                 </div>
 
@@ -68,19 +67,14 @@ export default function LoginPage() {
                   </div>
 
                   <div className='text-sm'>
-                    <a href='#' className='font-medium text-indigo-600 hover:text-indigo-500'>
+                    <Link href='/forgot' className='font-medium text-indigo-600 hover:text-indigo-500'>
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
                 <div>
-                  <button
-                    type='submit'
-                    className='flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                  >
-                    Sign in
-                  </button>
+                  <Button type='submit'>Sign in</Button>
                 </div>
 
                 <div className='flex items-center justify-center'>

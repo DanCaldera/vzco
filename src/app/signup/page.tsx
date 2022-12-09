@@ -1,10 +1,18 @@
 'use client'
 
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import LeftInlineAddOnInput from '@/components/LeftInlineAddOnInput'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 
 export default function SignupPage() {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const _handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     toast('Sign up is not implemented yet', { icon: '🚧' })
@@ -35,12 +43,14 @@ export default function SignupPage() {
                     Username
                   </label>
                   <div className='mt-1'>
-                    <input
+                    <LeftInlineAddOnInput
                       id='username'
                       name='username'
                       type='text'
                       required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                      value={username}
+                      setValue={setUsername}
+                      addon='app.io/'
                     />
                   </div>
                 </div>
@@ -50,14 +60,7 @@ export default function SignupPage() {
                     Email address
                   </label>
                   <div className='mt-1'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      autoComplete='email'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-                    />
+                    <Input id='email' name='email' type='email' autoComplete='email' required value={email} setValue={setEmail} />
                   </div>
                 </div>
 
@@ -66,13 +69,14 @@ export default function SignupPage() {
                     Password
                   </label>
                   <div className='mt-1'>
-                    <input
+                    <Input
                       id='password'
                       name='password'
                       type='password'
                       autoComplete='current-password'
                       required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                      value={password}
+                      setValue={setPassword}
                     />
                   </div>
                 </div>
@@ -80,12 +84,7 @@ export default function SignupPage() {
                 <div className='flex items-center justify-between'></div>
 
                 <div>
-                  <button
-                    type='submit'
-                    className='flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                  >
-                    Sign up
-                  </button>
+                  <Button type='submit'>Sign up</Button>
                 </div>
 
                 <div className='flex items-center justify-center'>
