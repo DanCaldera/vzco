@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+optional: install husky to run pre-commit hooks
+
 ```bash
 npx install husky
 # or
