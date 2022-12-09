@@ -2,8 +2,9 @@
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
-import { ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
+import { Bars3Icon, ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 
@@ -14,7 +15,7 @@ export default function Example() {
     e.preventDefault()
 
     try {
-      const url = 'http://localhost:4000/api/v1/waitlist'
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/waitlist`
 
       const response = await fetch(url, {
         method: 'POST',
@@ -44,6 +45,18 @@ export default function Example() {
   return (
     <div className='bg-white pb-8 sm:pb-12 lg:pb-12'>
       <Toaster />
+      <div className='px-6 pt-6 lg:px-8'>
+        <nav className='flex h-9 items-center justify-between' aria-label='Global'>
+          <div className='lg:flex lg:min-w-0 lg:flex-1 lg:justify-end'>
+            <Link
+              href='/login'
+              className='inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20'
+            >
+              Log in
+            </Link>
+          </div>
+        </nav>
+      </div>
       <div className='overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48'>
         <div className='mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-24 lg:px-8'>
           <div>
