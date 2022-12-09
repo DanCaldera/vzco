@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Image from "next/image";
-import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { toast, Toaster } from "react-hot-toast";
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import Image from 'next/image'
+import Link from 'next/link'
+import { FormEvent, useState } from 'react'
+import { toast, Toaster } from 'react-hot-toast'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toast("Sign up is not implemented yet", { icon: "🚧" });
-  };
+    e.preventDefault()
+    toast('Sign up is not implemented yet', { icon: '🚧' })
+  }
   return (
     <div className="flex min-h-screen">
       <Toaster />
@@ -134,5 +134,5 @@ export default function LoginPage() {
         />
       </div>
     </div>
-  );
+  )
 }
