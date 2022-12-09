@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import React, { ReactNode } from 'react'
 import '../styles/globals.css'
 
 export default function RootLayout({
@@ -6,7 +6,7 @@ export default function RootLayout({
   // This will be populated with nested layouts or pages
   children
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <html className='h-full' lang='en'>
