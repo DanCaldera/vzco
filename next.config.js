@@ -3,12 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    appDir: true
+    appDir: true,
   },
   images: {
     dangerouslyAllowSVG: true,
-    domains: ['tailwindui.com', 'images.unsplash.com']
-  }
+    domains: ['tailwindui.com', 'images.unsplash.com'],
+  },
 }
 
 module.exports = nextConfig
