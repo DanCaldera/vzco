@@ -11,17 +11,39 @@ import * as yup from 'yup'
 export default function LoginPage() {
   const formik = useFormik({
     initialValues: {
-      email: '',
+      // in the backend can be email or username
+      username: '',
       password: '',
     },
     validationSchema: yup.object({
-      email: yup.string().email().required(),
+      username: yup.string().min(3).required(),
       password: yup.string().required(),
     }),
     onSubmit: async (values) => {
-      console.log({ values })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      )
 
-      toast.success('Login successful')
+      const data = await response.json()
+
+      if (data.error || data.statusCode >= 400) {
+        if (Array.isArray(data.message)) {
+          toast.error(data?.message[0])
+        } else {
+          toast.error(data?.message)
+        }
+      }
+
+      if (data.token) {
+        toast.success('You have logged successfully!')
+      }
     },
   })
 
@@ -54,25 +76,25 @@ export default function LoginPage() {
               >
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="emailOrUsername"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Email address or Username
                   </label>
                   <div className="mt-1">
                     <Input
-                      id="email"
-                      name="email"
-                      type="email"
+                      id="username"
+                      name="username"
+                      type="text"
                       required
-                      value={formik.values.email}
+                      value={formik.values.username}
                       setValue={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
                   </div>
-                  {formik.errors.email && formik.touched.email && (
+                  {formik.errors.username && formik.touched.username && (
                     <p className="text-red-500 text-xs italic">
-                      {formik.errors.email}
+                      {formik.errors.username}
                     </p>
                   )}
                 </div>
