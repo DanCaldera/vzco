@@ -12,11 +12,86 @@ export default function SignupPage() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [retypePassword, setRetypePassword] = useState('')
 
-  const _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const _handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    toast('Sign up is not implemented yet', { icon: '🚧' })
+
+    if (!username) {
+      toast.error('Username is required')
+      return
+    } else if (!email) {
+      toast.error('Email is required')
+      return
+    } else if (!password) {
+      toast.error('Password is required')
+      return
+    } else if (password !== retypePassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+
+    try {
+      const response1 = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/waitlist/verify`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        }
+      )
+
+      const data1 = await response1.json()
+
+      if (data1.error || data1.statusCode >= 400) {
+        if (Array.isArray(data1.message)) {
+          toast.error(data1?.message[0])
+        } else {
+          toast.error(data1?.message)
+        }
+      }
+
+      console.log({ data1 })
+
+      if (!data1) return toast.error('You are not on the waitlist!')
+
+      const response2 = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, email, password, retypePassword }),
+        }
+      )
+
+      const data2 = await response2.json()
+
+      if (data2.error || data2.statusCode >= 400) {
+        if (Array.isArray(data2.message)) {
+          toast.error(data2?.message[0])
+        } else {
+          toast.error(data2?.message)
+        }
+      }
+
+      if (data2.id) {
+        toast.success('You have created an account!')
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went wrong!')
+    }
+
+    setUsername('')
+    setEmail('')
+    setPassword('')
+    setRetypePassword('')
   }
+
   return (
     <div className="flex min-h-screen">
       <Toaster />
@@ -100,6 +175,25 @@ export default function SignupPage() {
                       required
                       value={password}
                       setValue={setPassword}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Repeat Password
+                  </label>
+                  <div className="mt-1">
+                    <Input
+                      id="retypePassword"
+                      name="retypePassword"
+                      type="password"
+                      required
+                      value={retypePassword}
+                      setValue={setRetypePassword}
                     />
                   </div>
                 </div>
