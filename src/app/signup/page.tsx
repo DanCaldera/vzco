@@ -16,15 +16,11 @@ export default function SignupPage() {
       username: '',
       email: '',
       password: '',
-      retypePassword: '',
     },
     validationSchema: yup.object({
       username: yup.string().required(),
       email: yup.string().email().required(),
       password: yup.string().min(8).required(),
-      retypePassword: yup
-        .string()
-        .oneOf([yup.ref('password'), null], 'Passwords must match'),
     }),
     onSubmit: async (values) => {
       try {
@@ -48,8 +44,6 @@ export default function SignupPage() {
             toast.error(data1?.message)
           }
         }
-
-        console.log({ data1 })
 
         if (!data1) return toast.error('You are not on the waitlist!')
 
@@ -81,6 +75,8 @@ export default function SignupPage() {
         console.log(error)
         toast.error('Something went wrong!')
       }
+
+      formik.resetForm()
     },
   })
 
@@ -183,31 +179,6 @@ export default function SignupPage() {
                         {formik.errors.password}
                       </p>
                     )}
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Repeat Password
-                  </label>
-                  <div className="mt-1">
-                    <Input
-                      id="retypePassword"
-                      name="retypePassword"
-                      type="password"
-                      required
-                      value={formik.values.retypePassword}
-                      setValue={formik.handleChange}
-                    />
-                    {formik.errors.retypePassword &&
-                      formik.touched.retypePassword && (
-                        <p className="text-red-500 text-xs italic">
-                          {formik.errors.retypePassword}
-                        </p>
-                      )}
                   </div>
                 </div>
 
