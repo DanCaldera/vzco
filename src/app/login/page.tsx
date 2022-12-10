@@ -2,18 +2,29 @@
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
+import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FormEvent, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
+import * as yup from 'yup'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    toast('Sign up is not implemented yet', { icon: '🚧' })
-  }
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: yup.object({
+      email: yup.string().email().required(),
+      password: yup.string().required(),
+    }),
+    onSubmit: async (values) => {
+      console.log({ values })
+
+      toast.success('Login successful')
+    },
+  })
+
   return (
     <div className="flex min-h-screen">
       <Toaster />
@@ -37,7 +48,7 @@ export default function LoginPage() {
           <div className="mt-8">
             <div className="mt-6">
               <form
-                onSubmit={_handleSubmit}
+                onSubmit={formik.handleSubmit}
                 method="POST"
                 className="space-y-6"
               >
@@ -54,10 +65,16 @@ export default function LoginPage() {
                       name="email"
                       type="email"
                       required
-                      value={email}
-                      setValue={setEmail}
+                      value={formik.values.email}
+                      setValue={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.email}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -73,10 +90,16 @@ export default function LoginPage() {
                       name="password"
                       type="password"
                       required
-                      value={password}
-                      setValue={setPassword}
+                      value={formik.values.password}
+                      setValue={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
+                  {formik.errors.password && formik.touched.password && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.password}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">

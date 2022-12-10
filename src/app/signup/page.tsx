@@ -3,94 +3,86 @@
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 import LeftInlineAddOnInput from '@/components/LeftInlineAddOnInput'
+import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { FormEvent, useState } from 'react'
+import React from 'react'
 import { toast, Toaster } from 'react-hot-toast'
+import * as yup from 'yup'
 
 export default function SignupPage() {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [retypePassword, setRetypePassword] = useState('')
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      retypePassword: '',
+    },
+    validationSchema: yup.object({
+      username: yup.string().required(),
+      email: yup.string().email().required(),
+      password: yup.string().min(8).required(),
+      retypePassword: yup
+        .string()
+        .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const response1 = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/waitlist/verify`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: values.email }),
+          }
+        )
 
-  const _handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+        const data1 = await response1.json()
 
-    if (!username) {
-      toast.error('Username is required')
-      return
-    } else if (!email) {
-      toast.error('Email is required')
-      return
-    } else if (!password) {
-      toast.error('Password is required')
-      return
-    } else if (password !== retypePassword) {
-      toast.error('Passwords do not match')
-      return
-    }
-
-    try {
-      const response1 = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/waitlist/verify`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
+        if (data1.error || data1.statusCode >= 400) {
+          if (Array.isArray(data1.message)) {
+            toast.error(data1?.message[0])
+          } else {
+            toast.error(data1?.message)
+          }
         }
-      )
 
-      const data1 = await response1.json()
+        console.log({ data1 })
 
-      if (data1.error || data1.statusCode >= 400) {
-        if (Array.isArray(data1.message)) {
-          toast.error(data1?.message[0])
-        } else {
-          toast.error(data1?.message)
+        if (!data1) return toast.error('You are not on the waitlist!')
+
+        const response2 = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values),
+          }
+        )
+
+        const data2 = await response2.json()
+
+        if (data2.error || data2.statusCode >= 400) {
+          if (Array.isArray(data2.message)) {
+            toast.error(data2?.message[0])
+          } else {
+            toast.error(data2?.message)
+          }
         }
+
+        if (data2.id) {
+          toast.success('You have created an account!')
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error('Something went wrong!')
       }
-
-      console.log({ data1 })
-
-      if (!data1) return toast.error('You are not on the waitlist!')
-
-      const response2 = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, email, password, retypePassword }),
-        }
-      )
-
-      const data2 = await response2.json()
-
-      if (data2.error || data2.statusCode >= 400) {
-        if (Array.isArray(data2.message)) {
-          toast.error(data2?.message[0])
-        } else {
-          toast.error(data2?.message)
-        }
-      }
-
-      if (data2.id) {
-        toast.success('You have created an account!')
-      }
-    } catch (error) {
-      console.log(error)
-      toast.error('Something went wrong!')
-    }
-
-    setUsername('')
-    setEmail('')
-    setPassword('')
-    setRetypePassword('')
-  }
+    },
+  })
 
   return (
     <div className="flex min-h-screen">
@@ -115,7 +107,7 @@ export default function SignupPage() {
           <div className="mt-8">
             <div className="mt-6">
               <form
-                onSubmit={_handleSubmit}
+                onSubmit={formik.handleSubmit}
                 method="POST"
                 className="space-y-6"
               >
@@ -132,11 +124,16 @@ export default function SignupPage() {
                       name="username"
                       type="text"
                       required
-                      value={username}
-                      setValue={setUsername}
+                      value={formik.values.username}
+                      setValue={formik.handleChange}
                       addon="app.io/"
                     />
                   </div>
+                  {formik.errors.username && formik.touched.username && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.username}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -153,10 +150,15 @@ export default function SignupPage() {
                       type="email"
                       autoComplete="email"
                       required
-                      value={email}
-                      setValue={setEmail}
+                      value={formik.values.email}
+                      setValue={formik.handleChange}
                     />
                   </div>
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.email}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -173,9 +175,14 @@ export default function SignupPage() {
                       type="password"
                       autoComplete="current-password"
                       required
-                      value={password}
-                      setValue={setPassword}
+                      value={formik.values.password}
+                      setValue={formik.handleChange}
                     />
+                    {formik.errors.password && formik.touched.password && (
+                      <p className="text-red-500 text-xs italic">
+                        {formik.errors.password}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -192,9 +199,15 @@ export default function SignupPage() {
                       name="retypePassword"
                       type="password"
                       required
-                      value={retypePassword}
-                      setValue={setRetypePassword}
+                      value={formik.values.retypePassword}
+                      setValue={formik.handleChange}
                     />
+                    {formik.errors.retypePassword &&
+                      formik.touched.retypePassword && (
+                        <p className="text-red-500 text-xs italic">
+                          {formik.errors.retypePassword}
+                        </p>
+                      )}
                   </div>
                 </div>
 
