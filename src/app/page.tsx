@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 
-export default function Example() {
+export default function RootPage() {
   const [email, setEmail] = useState('')
 
   const _handleNotifyMe = async (e: FormEvent<HTMLFormElement>) => {
