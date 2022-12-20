@@ -6,7 +6,8 @@ interface InputProps {
   name: string
   required?: boolean
   value: string
-  setValue: (value: string) => void
+  setValue: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   placeholder?: string
   autoComplete?: string
 }
@@ -18,6 +19,7 @@ const Input: React.FC<InputProps> = ({
   required = false,
   value,
   setValue,
+  onBlur,
   placeholder,
   autoComplete,
 }) => (
@@ -28,7 +30,8 @@ const Input: React.FC<InputProps> = ({
     className="block w-full rounded-md border border-gray-300 px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
     value={value}
     required={required}
-    onChange={(e) => setValue(e.target.value)}
+    onChange={setValue}
+    onBlur={onBlur}
     placeholder={placeholder}
     autoComplete={autoComplete}
   />

@@ -6,7 +6,8 @@ interface LeftInlineAddOnInputProps {
   name: string
   required?: boolean
   value: string
-  setValue: (value: string) => void
+  setValue: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   placeholder?: string
   addon: string
 }
@@ -17,6 +18,7 @@ const LeftInlineAddOnInput: React.FC<LeftInlineAddOnInputProps> = ({
   required = false,
   value,
   setValue,
+  onBlur,
   placeholder,
   addon,
 }) => (
@@ -30,7 +32,8 @@ const LeftInlineAddOnInput: React.FC<LeftInlineAddOnInputProps> = ({
       id={id}
       required={required}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={setValue}
+      onBlur={onBlur}
       className="block w-full rounded-md border border-gray-300 py-3 pl-16 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
       placeholder={placeholder}
     />

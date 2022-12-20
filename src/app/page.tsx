@@ -1,14 +1,13 @@
 'use client'
 
 import Button from '@/components/Button'
-import Input from '@/components/Input'
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 
-export default function Example() {
+export default function RootPage() {
   const [email, setEmail] = useState('')
 
   const _handleNotifyMe = async (e: FormEvent<HTMLFormElement>) => {
@@ -52,7 +51,7 @@ export default function Example() {
         >
           <div className="lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
             <Link
-              href="/login"
+              href="/auth/login"
               className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20"
             >
               Log in
@@ -102,13 +101,14 @@ export default function Example() {
                     Email address
                   </label>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Input
+                  <input
                     id="hero-email"
                     name="hero-email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
-                    setValue={setEmail}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full rounded-md border border-gray-300 px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-3">

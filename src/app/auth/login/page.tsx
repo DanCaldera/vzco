@@ -2,18 +2,51 @@
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
+import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FormEvent, useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
+import * as yup from 'yup'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    toast('Sign up is not implemented yet', { icon: '🚧' })
-  }
+  const formik = useFormik({
+    initialValues: {
+      // in the backend can be email or username
+      username: '',
+      password: '',
+    },
+    validationSchema: yup.object({
+      username: yup.string().min(3).required(),
+      password: yup.string().required(),
+    }),
+    onSubmit: async (values) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      )
+
+      const data = await response.json()
+
+      if (data.error || data.statusCode >= 400) {
+        if (Array.isArray(data.message)) {
+          toast.error(data?.message[0])
+        } else {
+          toast.error(data?.message)
+        }
+      }
+
+      if (data.token) {
+        toast.success('You have logged successfully!')
+      }
+    },
+  })
+
   return (
     <div className="flex min-h-screen">
       <Toaster />
@@ -37,27 +70,33 @@ export default function LoginPage() {
           <div className="mt-8">
             <div className="mt-6">
               <form
-                onSubmit={_handleSubmit}
+                onSubmit={formik.handleSubmit}
                 method="POST"
                 className="space-y-6"
               >
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="emailOrUsername"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Email address or Username
                   </label>
                   <div className="mt-1">
                     <Input
-                      id="email"
-                      name="email"
-                      type="email"
+                      id="username"
+                      name="username"
+                      type="text"
                       required
-                      value={email}
-                      setValue={setEmail}
+                      value={formik.values.username}
+                      setValue={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
+                  {formik.errors.username && formik.touched.username && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.username}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -73,14 +112,21 @@ export default function LoginPage() {
                       name="password"
                       type="password"
                       required
-                      value={password}
-                      setValue={setPassword}
+                      value={formik.values.password}
+                      setValue={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
+                  {formik.errors.password && formik.touched.password && (
+                    <p className="text-red-500 text-xs italic">
+                      {formik.errors.password}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center">
+                  <div></div>
+                  {/* <div className="flex items-center">
                     <input
                       id="remember-me"
                       name="remember-me"
@@ -93,11 +139,11 @@ export default function LoginPage() {
                     >
                       Remember me
                     </label>
-                  </div>
+                  </div> */}
 
                   <div className="text-sm">
                     <Link
-                      href="/forgot"
+                      href="/auth/forgot"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Forgot your password?
@@ -112,7 +158,7 @@ export default function LoginPage() {
                 <div className="flex items-center justify-center">
                   <div className="text-sm">
                     <Link
-                      href="/signup"
+                      href="/auth/signup"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Create an account
