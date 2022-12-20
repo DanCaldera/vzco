@@ -125,7 +125,8 @@ export default function LoginPage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center">
+                  <div></div>
+                  {/* <div className="flex items-center">
                     <input
                       id="remember-me"
                       name="remember-me"
@@ -138,11 +139,11 @@ export default function LoginPage() {
                     >
                       Remember me
                     </label>
-                  </div>
+                  </div> */}
 
                   <div className="text-sm">
                     <Link
-                      href="/forgot"
+                      href="/auth/forgot"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Forgot your password?
@@ -157,7 +158,7 @@ export default function LoginPage() {
                 <div className="flex items-center justify-center">
                   <div className="text-sm">
                     <Link
-                      href="/signup"
+                      href="/auth/signup"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Create an account

@@ -1,10 +1,44 @@
+'use client'
+
 import Button from '@/components/Button'
+import Input from '@/components/Input'
+import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { toast, Toaster } from 'react-hot-toast'
+import * as yup from 'yup'
 
 export default function ForgotPage() {
+  const router = useRouter()
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema: yup.object({
+      email: yup.string().email().required(),
+    }),
+    onSubmit: async (values) => {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email/forgot-password`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ to: values.email }),
+        }
+      )
+
+      toast.success('Email sent! Check your inbox.')
+
+      router.push('/auth/login')
+    },
+  })
   return (
     <div className="flex min-h-screen">
+      <Toaster />
       <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
@@ -24,7 +58,7 @@ export default function ForgotPage() {
 
           <div className="mt-8">
             <div className="mt-6">
-              <form action="#" method="POST" className="space-y-6">
+              <form onSubmit={formik.handleSubmit} className="space-y-6">
                 <div>
                   <label
                     htmlFor="email"
@@ -33,13 +67,15 @@ export default function ForgotPage() {
                     Email address
                   </label>
                   <div className="mt-1">
-                    <input
+                    <Input
                       id="email"
                       name="email"
                       type="email"
                       autoComplete="email"
                       required
-                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      value={formik.values.email}
+                      setValue={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
                 </div>
@@ -51,7 +87,7 @@ export default function ForgotPage() {
                 <div className="flex items-center justify-center">
                   <div className="text-sm">
                     <Link
-                      href="/login"
+                      href="/auth/login"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Return to Login
